@@ -8,11 +8,15 @@ def make_pairs(student_lst, pair_dict):
     low_score = sum(pair_dict.itervalues()) + 1000
     final_lst = None
     final_dict = None
-
-    for _ in xrange(1000):
+    test_sum = 0
+    for _ in xrange(100000):
+        test =  pair_dict[('Brayden', 'Jenny')]
+        if test > 1:
+            print test
         random.shuffle(student_lst)
         pair_gen = itertools.izip(student_lst[:-3:2], student_lst[1:-3:2])
         pairs = [tuple(sorted([student1, student2])) for (student1, student2) in pair_gen]
+
 
         remains = itertools.combinations(student_lst[-3:], 2)
         for student1, student2 in remains:
@@ -24,11 +28,20 @@ def make_pairs(student_lst, pair_dict):
         for pair in pairs:
             temp_dict[pair] += 1
 
+
+        test = temp_dict[('Brayden', 'Jenny')]
+
+        if test > 1:
+            test_sum += 1
+
         cur_score = sum(temp_dict.itervalues())
+        if cur_score != 53:
+            print cur_score
         if cur_score < low_score:
             final_lst = student_lst[:]
             final_dict = temp_dict.copy()
 
+    print test_sum
     if final_lst and final_dict:
         return final_lst, final_dict
 
@@ -61,5 +74,5 @@ if __name__ == '__main__':
     confirm = raw_input('List okay?')
     if confirm != 'y':
         sys.exit()
-    with open('pair_dict.pkl', 'w') as f:
-        pickle.dump(updated_dict, f)
+    # with open('pair_dict.pkl', 'w') as f:
+    #     pickle.dump(updated_dict, f)
