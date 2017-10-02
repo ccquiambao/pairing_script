@@ -4,27 +4,28 @@ import random
 import pickle
 import sys
 
-def make_pairs(student_lst, pair_dict, force_triple=False):
+def make_pairs(student_lst, pair_dict, force_together=False):
     scores = pair_dict.itervalues()
     low_score = float('inf')
     final_lst = None
     final_dict = None
-
+    # force_together = set(force_together)
     for _ in xrange(10000):
 
         random.shuffle(student_lst)
         pair_gen = itertools.izip(student_lst[:-3:2], student_lst[1:-3:2])
         pairs = [tuple(sorted([student1, student2])) for (student1, student2) in pair_gen]
 
-        remains = itertools.combinations(student_lst[-3:], 2)
-        if force_triple:
-            if (force_triple not in student_lst[-3]):
-                continue
+        if len(student_lst) % 2:
+            remains = itertools.combinations(student_lst[-3:], 2)
+            if force_together:
+                if (force_together not in set(student_lst[-3:])):
+                    continue
 
-        for student1, student2 in remains:
-            pair = sorted([student1, student2])
-            pair = tuple(pair)
-            pairs.append(pair)
+            for student1, student2 in remains:
+                pair = sorted([student1, student2])
+                pair = tuple(pair)
+                pairs.append(pair)
 
         temp_dict = pair_dict.copy()
         for pair in pairs:
@@ -51,17 +52,26 @@ def make_pairs(student_lst, pair_dict, force_triple=False):
 
 
 def print_pairs(student_lst):
-    for ind, student in enumerate(student_lst[:-3], 1):
+
+    if len(student_lst) % 2:
+        students = student_lst[:-3]
+
+    else:
+        students = student_lst
+
+    for ind, student in enumerate(students, 1):
         print '{:12}'.format(student.strip()),
         if not ind % 2:
             print
 
-    for student in student_lst[-3:]:
-        print '{:12}'.format(student),
+    if len(student_lst) % 2:
+        for student in student_lst[-3:]:
+            print '{:12}'.format(student),
 
 
 if __name__ == '__main__':
-
+    # TO-DO
+    # take different lists
     with open('students.txt', 'r') as f:
         students = [student.strip() for student in f]
 
@@ -73,7 +83,8 @@ if __name__ == '__main__':
     else:
         triplet = False
 
-    pairs, updated_dict = make_pairs(students, pair_dict, force_triple=triplet)
+    print triplet
+    pairs, updated_dict = make_pairs(students, pair_dict, force_together=triplet)
     print_pairs(pairs)
     print
     print sum(updated_dict.itervalues())
