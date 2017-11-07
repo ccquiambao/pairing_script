@@ -1,13 +1,9 @@
 Ahmed
-Arnav
 Brayden
 Brendan
 Chris
 Eric
-Helen
-James
 Jenny
-Juan
 Lee
 Navata
 Nick
@@ -17,3 +13,6 @@ Mike
 Allen
 John
 Selena
+Arnav
+Helen
+Juan
